@@ -16,14 +16,14 @@ exports.createRequest = async (req, res) => {
       patientName, patientAge, hospital, city,
       bloodGroup, unitsNeeded, urgencyLevel,
       requesterName, requesterPhone, requesterEmail,
-      notes, isEmergency
+      notes, isEmergency, userId
     } = req.body;
 
     const request = await Request.create({
       patientName, patientAge, hospital, city,
       bloodGroup, unitsNeeded, urgencyLevel,
       requesterName, requesterPhone, requesterEmail,
-      notes, isEmergency
+      notes, isEmergency, userId
     });
 
     // Auto-match donors based on blood group and city
@@ -141,7 +141,29 @@ exports.getRequestById = async (req, res) => {
   }
 };
 
-// @desc    Accept a blood request (assign a donor)
+// @desc    Get user's personal blood requests
+// @route   GET /api/requests/user/:userId
+// @access  Private
+exports.getUserRequests = async (req, res) => {
+  try {
+    const requests = await Request.find({ userId: req.params.userId })
+      .populate('assignedDonor', 'name phone bloodGroup')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: requests
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server error while fetching user requests',
+      error: error.message
+    });
+  }
+};
+
+// @desc    Assign donor to request (Accept)assign a donor)
 // @route   PATCH /api/requests/:id/accept
 // @access  Public
 exports.acceptRequest = async (req, res) => {

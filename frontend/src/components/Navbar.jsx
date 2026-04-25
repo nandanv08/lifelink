@@ -60,7 +60,8 @@ function Navbar() {
         <Link to="/" className="navbar-logo" id="navbar-logo">
           <span className="logo-icon">🩸</span>
           <span className="logo-text">
-            Life<span className="logo-accent">Link</span>
+            <span style={{ color: 'var(--primary)' }}>Life</span>
+            <span className="logo-accent" style={{ color: 'var(--gray-900)' }}>Link</span>
           </span>
         </Link>
 

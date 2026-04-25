@@ -11,7 +11,7 @@ const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 const CITIES = ['Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Pune', 'Kolkata', 'Ahmedabad', 'Jaipur', 'Lucknow'];
 
 function RequestForm({ onSuccess, initialDonor = null }) {
-  const { showNotification } = useApp();
+  const { showNotification, user } = useApp();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     patientName: '',
@@ -43,6 +43,11 @@ function RequestForm({ onSuccess, initialDonor = null }) {
       const submitData = { ...formData };
       submitData.patientAge = parseInt(submitData.patientAge);
       submitData.unitsNeeded = parseInt(submitData.unitsNeeded);
+      
+      // Attach the user ID if the user is logged in
+      if (user?._id) {
+        submitData.userId = user._id;
+      }
 
       const result = await requestAPI.create(submitData);
 

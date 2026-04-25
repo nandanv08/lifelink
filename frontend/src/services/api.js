@@ -115,6 +115,8 @@ export const requestAPI = {
 
   getById: (id) => fetchAPI(`/requests/${id}`),
 
+  getUserRequests: (userId) => fetchAPI(`/requests/user/${userId}`),
+
   create: (requestData) => fetchAPI('/requests', {
     method: 'POST',
     body: JSON.stringify(requestData)

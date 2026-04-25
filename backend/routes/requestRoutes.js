@@ -12,8 +12,10 @@ const {
   acceptRequest,
   completeRequest,
   cancelRequest,
-  deleteRequest
+  deleteRequest,
+  getUserRequests
 } = require('../controllers/requestController');
+const { protect } = require('../middleware/auth');
 
 // Public routes
 router.get('/', getRequests);
@@ -22,6 +24,9 @@ router.post('/', createRequest);
 router.patch('/:id/accept', acceptRequest);
 router.patch('/:id/complete', completeRequest);
 router.patch('/:id/cancel', cancelRequest);
-router.delete('/:id', deleteRequest);
+
+// Protected routes
+router.get('/user/:userId', protect, getUserRequests);
+router.delete('/:id', protect, deleteRequest);
 
 module.exports = router;

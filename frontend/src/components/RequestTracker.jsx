@@ -8,7 +8,7 @@ import { requestAPI } from '../services/api';
 import { useApp } from '../context/AppContext';
 import Loading from './Loading';
 
-function RequestTracker({ limit = 10, showFilters = true, adminMode = false }) {
+function RequestTracker({ limit = 10, showFilters = true, adminMode = false, userId = null }) {
   const { showNotification, isAdmin } = useApp();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,10 +17,14 @@ function RequestTracker({ limit = 10, showFilters = true, adminMode = false }) {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const params = { limit };
-      if (filter !== 'all') params.status = filter;
-      
-      const result = await requestAPI.getAll(params);
+      let result;
+      if (userId) {
+        result = await requestAPI.getUserRequests(userId);
+      } else {
+        const params = { limit };
+        if (filter !== 'all') params.status = filter;
+        result = await requestAPI.getAll(params);
+      }
       if (result.success) {
         setRequests(result.data);
       }
@@ -36,7 +40,7 @@ function RequestTracker({ limit = 10, showFilters = true, adminMode = false }) {
     // Auto refresh every 30s
     const interval = setInterval(fetchRequests, 30000);
     return () => clearInterval(interval);
-  }, [filter, limit]);
+  }, [filter, limit, userId]);
 
   const handleAction = async (id, action) => {
     try {

@@ -69,6 +69,11 @@ const requestSchema = new mongoose.Schema({
     trim: true,
     lowercase: true
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
 
   // Donor Assignment
   assignedDonor: {

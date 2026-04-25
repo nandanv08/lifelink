@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import RequestTracker from '../components/RequestTracker';
 import RequestForm from '../components/RequestForm';
+import { useApp } from '../context/AppContext';
 
 function Requests() {
+  const { isAuthenticated, user } = useApp();
   const [activeTab, setActiveTab] = useState('browse');
 
   useEffect(() => {
@@ -29,10 +31,19 @@ function Requests() {
            <button 
              className={`btn ${activeTab === 'create' ? 'btn-danger' : 'btn-outline'}`} 
              onClick={() => setActiveTab('create')}
-             style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
+             style={{ borderRadius: isAuthenticated ? '0' : '0 var(--radius-md) var(--radius-md) 0' }}
            >
              ➕ Post New Request
            </button>
+           {isAuthenticated && (
+             <button 
+               className={`btn ${activeTab === 'mine' ? 'btn-secondary' : 'btn-outline'}`} 
+               onClick={() => setActiveTab('mine')}
+               style={{ borderRadius: '0 var(--radius-md) var(--radius-md) 0' }}
+             >
+               👤 My Requests
+             </button>
+           )}
         </div>
 
         <div style={{ maxWidth: activeTab === 'create' ? '800px' : '1000px', margin: '0 auto' }}>
@@ -41,7 +52,11 @@ function Requests() {
            )}
            
            {activeTab === 'create' && (
-              <RequestForm onSuccess={() => setActiveTab('browse')} />
+              <RequestForm onSuccess={() => setActiveTab('mine')} />
+           )}
+
+           {activeTab === 'mine' && isAuthenticated && (
+              <RequestTracker limit={20} showFilters={false} userId={user?._id} />
            )}
         </div>
       </div>

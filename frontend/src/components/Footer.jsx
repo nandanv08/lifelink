@@ -15,7 +15,7 @@ function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <span className="logo-icon">🩸</span>
-              <span className="logo-text">Life<span className="logo-accent">Link</span></span>
+              <span className="logo-text"><span style={{ color: 'var(--primary)' }}>Life</span><span className="logo-accent" style={{ color: 'var(--gray-900)' }}>Link</span></span>
             </div>
             <p className="footer-desc">
               Connecting blood donors with those in need through intelligent matching technology.
@@ -54,15 +54,15 @@ function Footer() {
             <h4 className="footer-heading">Contact Us</h4>
             <div className="footer-contact">
               <span>📍</span>
-              <span>Mumbai, Maharashtra, India</span>
+              <span>Bangalore, India</span>
             </div>
             <div className="footer-contact">
               <span>📞</span>
-              <span>+91 1800-XXX-XXXX</span>
+              <span>+91 7411822776</span>
             </div>
             <div className="footer-contact">
               <span>✉️</span>
-              <span>help@lifelink.org</span>
+              <span>lifelink@gmail.com</span>
             </div>
             <div className="footer-contact">
               <span>🕐</span>

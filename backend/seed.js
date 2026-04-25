@@ -11,7 +11,7 @@ const Donor = require('./models/Donor');
 const Request = require('./models/Request');
 const User = require('./models/User');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/lifelink';
+
 
 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -58,7 +58,7 @@ function randomDate(start, end) {
 
 async function seedDatabase() {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connected to MongoDB');
 
     // Clear existing data
