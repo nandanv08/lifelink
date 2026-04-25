@@ -61,7 +61,7 @@ function Navbar() {
           <span className="logo-icon">🩸</span>
           <span className="logo-text">
             <span style={{ color: 'var(--primary)' }}>Life</span>
-            <span className="logo-accent" style={{ color: 'var(--gray-900)' }}>Link</span>
+            <span className="logo-accent" style={{ color: '#16a34a' }}>Link</span>
           </span>
         </Link>
 

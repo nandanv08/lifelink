@@ -114,106 +114,35 @@ async function seedDatabase() {
     });
     console.log('👤 Donor user created (donor@lifelink.com / donor123)');
 
-    // Create sample donors (40 donors)
-    const donors = [];
-    for (let i = 0; i < 40; i++) {
-      const firstName = randomFrom(firstNames);
-      const lastName = randomFrom(lastNames);
-      const gender = i < 25 ? (i % 3 === 2 ? 'Female' : 'Male') : randomFrom(genders);
-      const hasLastDonation = Math.random() > 0.3;
-      const lastDonationDate = hasLastDonation
-        ? randomDate(new Date('2024-01-01'), new Date())
-        : null;
-      const city = randomFrom(cities);
+    // Create 1 Donor profile for the Demo Donor user
+    const sampleDonor = await Donor.create({
+      name: 'Demo Donor',
+      email: 'donor@lifelink.com',
+      phone: '9876543210',
+      userId: donorUser._id,
+      age: 25,
+      gender: 'Male',
+      bloodGroup: 'O+',
+      city: 'Bangalore',
+      state: 'Karnataka',
+      isAvailable: true,
+      totalDonations: 0
+    });
+    console.log(`🩸 1 base donor created`);
 
-      donors.push({
-        name: `${firstName} ${lastName}`,
-        email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${i}@email.com`,
-        phone: randomPhone(),
-        age: Math.floor(Math.random() * (55 - 18) + 18),
-        gender,
-        bloodGroup: randomFrom(bloodGroups),
-        city,
-        state: cityStateMap[city],
-        address: `${Math.floor(Math.random() * 500) + 1}, Sector ${Math.floor(Math.random() * 50) + 1}`,
-        isAvailable: Math.random() > 0.2, // 80% available
-        lastDonationDate,
-        totalDonations: Math.floor(Math.random() * 15),
-        weight: Math.floor(Math.random() * (90 - 45) + 45),
-        hasMedicalConditions: Math.random() > 0.9, // 10% have conditions
-        isVerified: Math.random() > 0.3,
-        responseRate: Math.floor(Math.random() * (100 - 60) + 60),
-        lastActive: randomDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), new Date()),
-        createdAt: randomDate(new Date('2024-06-01'), new Date()),
-        // Add some health records for demo
-        healthRecords: Math.random() > 0.5 ? [{
-          date: randomDate(new Date('2024-08-01'), new Date()),
-          hemoglobin: Math.floor(Math.random() * (17 - 12) + 12 * 10) / 10,
-          bloodPressureSystolic: Math.floor(Math.random() * (140 - 100) + 100),
-          bloodPressureDiastolic: Math.floor(Math.random() * (90 - 60) + 60),
-          pulseRate: Math.floor(Math.random() * (100 - 60) + 60),
-          notes: 'Routine check'
-        }] : []
-      });
-    }
-
-    const createdDonors = await Donor.insertMany(donors);
-    console.log(`🩸 ${createdDonors.length} donors created`);
-
-    // Link first donor to donor user account
-    donorUser.donorProfile = createdDonors[0]._id;
+    // Link donor to user account
+    donorUser.donorProfile = sampleDonor._id;
     await donorUser.save();
-    await Donor.findByIdAndUpdate(createdDonors[0]._id, { userId: donorUser._id });
 
-    // Create sample blood requests (15 requests)
-    const statuses = ['pending', 'pending', 'pending', 'accepted', 'accepted', 'completed', 'completed', 'completed'];
-    const urgencyLevels = ['normal', 'normal', 'urgent', 'urgent', 'critical'];
-    const requests = [];
-
-    for (let i = 0; i < 15; i++) {
-      const status = randomFrom(statuses);
-      const city = randomFrom(cities);
-      const bloodGroup = randomFrom(bloodGroups);
-
-      const request = {
-        patientName: `${randomFrom(firstNames)} ${randomFrom(lastNames)}`,
-        patientAge: Math.floor(Math.random() * (70 - 5) + 5),
-        hospital: randomFrom(hospitals),
-        city,
-        bloodGroup,
-        unitsNeeded: Math.floor(Math.random() * 4) + 1,
-        urgencyLevel: randomFrom(urgencyLevels),
-        status,
-        requesterName: `${randomFrom(firstNames)} ${randomFrom(lastNames)}`,
-        requesterPhone: randomPhone(),
-        requesterEmail: `requester${i}@email.com`,
-        notes: i % 3 === 0 ? 'Urgent surgery scheduled' : '',
-        isEmergency: Math.random() > 0.7,
-        createdAt: randomDate(new Date('2024-08-01'), new Date())
-      };
-
-      if (status === 'accepted' || status === 'completed') {
-        request.acceptedAt = randomDate(new Date(request.createdAt), new Date());
-        request.assignedDonor = randomFrom(createdDonors)._id;
-      }
-
-      if (status === 'completed') {
-        request.completedAt = randomDate(new Date(request.acceptedAt || request.createdAt), new Date());
-      }
-
-      requests.push(request);
-    }
-
-    const createdRequests = await Request.insertMany(requests);
-    console.log(`📋 ${createdRequests.length} blood requests created`);
+    console.log(`📋 0 blood requests created`);
 
     console.log(`
     ╔══════════════════════════════════════════════╗
     ║                                              ║
     ║   🩸 LifeLink Database Seeded!               ║
     ║                                              ║
-    ║   Donors: ${createdDonors.length}                                ║
-    ║   Requests: ${createdRequests.length}                              ║
+    ║   Donors: 1                                ║
+    ║   Requests: 0                              ║
     ║   Hospitals: ${hospitalUsers.length}                              ║
     ║                                              ║
     ║   Login Credentials:                         ║

@@ -15,7 +15,7 @@ function Footer() {
           <div className="footer-brand">
             <div className="footer-logo">
               <span className="logo-icon">🩸</span>
-              <span className="logo-text"><span style={{ color: 'var(--primary)' }}>Life</span><span className="logo-accent" style={{ color: 'var(--gray-900)' }}>Link</span></span>
+              <span className="logo-text"><span style={{ color: 'var(--primary)' }}>Life</span><span className="logo-accent" style={{ color: '#16a34a' }}>Link</span></span>
             </div>
             <p className="footer-desc">
               Connecting blood donors with those in need through intelligent matching technology.
